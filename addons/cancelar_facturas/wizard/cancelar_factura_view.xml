@@ -50,9 +50,9 @@
 		<field name="name">account.move.cancel.inherited</field>
 		<field name="model">account.move</field>
 		<field name="priority">100</field>
-		<field name="inherit_id" ref="moto_restrics.view_mr_account_move_edi_form_inherited"/>
+		<field name="inherit_id" ref="account_edi.view_move_form_inherit"/>
 		<field name="arch" type="xml">
-			<xpath expr="//button[@name='restricted_button_cancel_posted_moves']" position="attributes">
+			<xpath expr="//button[@name='button_cancel_posted_moves']" position="attributes">
 				<attribute name="name">%(cancelar_facturas.action_cancelar_factura)d</attribute>
 				<attribute name="type">action</attribute>
 				<attribute name="context">{'fact_id':id}</attribute>

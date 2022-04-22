@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_invoice:inherit" model="ir.ui.view">
+        <field name="name">invoice.cfdi40.inherited</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position = "before">
+                <button string="Prueba" type="object" name="test" icon = "fa-bug"/>
+            </field>
+
+            <xpath expr="//page[1]" position="after">
+                 <page string="CFDI 4.0">
+                    <group>
+                        <div>
+                           <h3>Nodo información global</h3>
+                           <group>
+                               <field name="version_cfdi"/>
+                               <field name="periodicidad_cfdi"/>
+                               <field name="meses_cfdi"/>
+                               <field name="year_cfdi" options="{'format': 0}"/>
+                           </group>
+                        </div>
+                        <div>
+                            <h3>Nodo cfdi comprobante</h3>
+                           <group>
+                               <field name="exportacion_cfdi"/>
+                           </group>
+                           <h3>Nodo cfdi relacionados</h3>
+                           <group name = 'cfdi_relacionados'>
+                                <!-- <field name="uso_cfdi"/> -->
+                                <!-- <field name="obj_impuesto"/> -->
+                           </group>
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+
+
+            <xpath expr="//group[@name='cfdi_relacionados']" position="inside">
+                <xpath expr="//field[@name='l10n_mx_edi_origin']" position="move"/>
+            </xpath>
+
+            <xpath expr="//field[@name='l10n_mx_edi_usage']" position="replace">
+                <field name="uso_cfdi" attrs="{'readonly':[('state', '!=', 'draft')], 'invisible': [('l10n_mx_edi_cfdi_request', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_factura_40" model="ir.ui.view">
+            <field name="name">product.template.form.factura.40</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='taxes_id']" position="after">
+                    <field name="obj_impuesto"/>
+                </xpath>
+            </field>
+    </record>
+</odoo>

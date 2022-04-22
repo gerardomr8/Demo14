@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<odoo>
+
+<!--Vista del wizard-->
+<record id="view_cancelar_pago_form" model="ir.ui.view">
+	<field name="name">cancelar.pago.wizard.form</field>
+	<field name="model">cancelar.pago.wizard</field>
+	<field name="arch" type="xml">
+		<form string="Cancelar pago">
+			<group>
+				<field name="id" invisible="True"/>
+				<field name="is_motivo_01" attrs="{'invisible':1}"/>
+				<field name="motivo"/>
+				<field name="folio_fiscal_cfdi" attrs="{'invisible': [('is_motivo_01', '=', True)], 'required':[('is_motivo_01', '!=', True)]}"/>
+			</group>
+			<footer>
+				<button string="Confirmar" name="cancelar_pago_def" type="object" class="btn-primary"/>
+				<button string="Cancel" class="btn-secondary" special="cancel"/>
+			</footer>
+		</form>
+	</field>
+</record>
+
+<record id="view_account_payment_form_inherit" model="ir.ui.view">
+	<field name="name">account.payment.inherited</field>
+	<field name="model">account.payment</field>
+	<field name="inherit_id" ref="account.view_account_payment_form"/>
+	<field name="arch" type="xml">
+		<xpath expr="//field[@name='journal_id']" position="after">
+			<field name="motivo_cancelacion" attrs="{'invisible':['|',('motivo_cancelacion','=',False),('state','!=','cancel')], 'readonly':True}"/>
+			<field name="uuid_relacionado" attrs="{'invisible':['|',('motivo_cancelacion','!=','01'),('state','!=','cancel')], 'readonly':True}"/>
+		</xpath>
+	</field>
+</record>
+
+<record id="action_cancelar_pago" model="ir.actions.act_window">
+	<field name="name">cancelar pago</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">cancelar.pago.wizard</field>
+	<field name="view_mode">form</field>
+	<field name="view_id" ref="view_cancelar_pago_form"/> 
+	<field name="target">new</field>
+</record>
+
+
+<record id="_view_account_payment_form_cancel_inherit" model="ir.ui.view">
+	<field name="name">account.payment.inherited2</field>
+	<field name="model">account.payment</field>
+	<field name="inherit_id" ref="account.view_account_payment_form"/>
+	<field name="arch" type="xml">
+		<xpath expr="//button[@name='action_cancel']" position="attributes">
+			<attribute name="name">%(cancelar_facturas.action_cancelar_pago)d</attribute>
+			<attribute name="type">action</attribute>
+			<attribute name="context">{'pago_id':id}</attribute>
+		</xpath>
+	</field>
+</record>
+
+
+
+</odoo>

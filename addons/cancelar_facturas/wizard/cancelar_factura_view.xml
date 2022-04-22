@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<odoo>
+
+	<record id="view_cancelar_factura_form" model="ir.ui.view">
+		<field name="name">cancelar.factura.wizard.form</field>
+		<field name="model">cancelar.factura.wizard</field>
+		<field name="arch" type="xml">
+			<form string="Cancelar factura">
+				<group>
+					<field name="id" invisible="True"/>
+					<field name="is_motivo_01" attrs="{'invisible':1}"/>
+					<field name="motivo"/> <!--Este campo se oculta dependiendo del valor de la variable booleana is_motivo_01-->
+					<field name="folio_fiscal_cfdi" attrs="{'invisible': [('is_motivo_01', '=', True)], 'required':[('is_motivo_01', '!=', True)]}"/>
+				</group>
+				<footer>
+					<button string="Confirmar" name="cancelar_factura_def" type="object" class="btn-primary"/>
+					<button string="Cancel" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="view_move_form_inherit" model="ir.ui.view">
+		<field name="name">account.move.inherited</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='edi_state']" position="before">
+				<field name="motivo_cancelacion" attrs="{'invisible':['|',('motivo_cancelacion','=',False),('state','!=','cancel')], 'readonly':True}"/>
+				<field name="uuid_relacionado" attrs="{'invisible':['|',('motivo_cancelacion','!=','01'),('state','!=','cancel')], 'readonly':True}"/>
+			</xpath>
+		</field>
+	</record>
+
+
+	<record id="action_cancelar_factura" model="ir.actions.act_window">
+		<field name="name">cancelar factura</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">cancelar.factura.wizard</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="view_cancelar_factura_form"/> 
+		<field name="target">new</field>
+	</record>
+
+
+	
+	<record id="_invoice_form_cancel_inherit" model="ir.ui.view">
+		<field name="name">account.move.cancel.inherited</field>
+		<field name="model">account.move</field>
+		<field name="priority">100</field>
+		<field name="inherit_id" ref="moto_restrics.view_mr_account_move_edi_form_inherited"/>
+		<field name="arch" type="xml">
+			<xpath expr="//button[@name='restricted_button_cancel_posted_moves']" position="attributes">
+				<attribute name="name">%(cancelar_facturas.action_cancelar_factura)d</attribute>
+				<attribute name="type">action</attribute>
+				<attribute name="context">{'fact_id':id}</attribute>
+			</xpath>
+		</field>
+	</record>
+
+</odoo>

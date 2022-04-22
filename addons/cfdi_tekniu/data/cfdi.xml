@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="cfdiv33" inherit_id="l10n_mx_edi.cfdiv33">
+            <xpath expr="(//*[local-name()='Emisor'])" position="attributes">
+                <attribute name="t-att-Rfc">supplier.l10n_mx_edi_get_customer_rfc()</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>

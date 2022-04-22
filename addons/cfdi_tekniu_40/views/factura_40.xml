@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <template id="discount_invoices" inherit_id="account.report_invoice_document">
+        
+        <xpath expr="//table[@class='table table-sm o_main_table']" position="attributes">
+            <attribute name="style">width:98%;table-layout: fixed; font-size: 12px;</attribute>
+        </xpath>        
+
+
+        <!-- Campos Facturacion 4.0 -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr/th[6]" position="after">
+            <th style="text-align: center;"><span>Descuento</span></th>
+            <th style="text-align: center;"><span>Impuesto</span></th>
+            <th style="text-align: center;"><span>Tipo Factor</span></th>
+            <th style="text-align: center;"><span>Objeto de impuesto</span></th>
+        </xpath>
+
+        <!-- Valores de los Campos Facturacion 4.0 -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody//tr[1]//td[6]" position="after">
+            <td style="text-align: center;"><span t-field="line.discount"/></td>
+            <t t-set="Impuesto" t-value="line.product_id.taxes_id.invoice_repartition_line_ids.tag_ids.name"/>
+            <t t-set="ImpuestoFlag" t-value="0"/>
+            <t t-if="Impuesto == 'ISR'">
+                <td style="text-align: center;">001</td>
+                <t t-set="ImpuestoFlag" t-value="1"/>
+            </t>
+            <t t-if="Impuesto == 'IVA'">
+                <td style="text-align: center;">002</td>
+                <t t-set="ImpuestoFlag" t-value="1"/>
+            </t>
+            <t t-if="Impuesto == 'IEPS'">
+                <td style="text-align: center;">003</td>
+                <t t-set="ImpuestoFlag" t-value="1"/>
+            </t>
+            <t t-if="not ImpuestoFlag">
+                <td style="text-align: center;"><p/></td>
+            </t>
+            <td style="text-align: center;"><span t-field="line.product_id.taxes_id.l10n_mx_tax_type"/></td>
+            <td style="text-align: center;"><span t-field="line.product_id.obj_impuesto"/></td>
+        </xpath>
+
+    </template>
+</odoo>

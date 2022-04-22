@@ -6,10 +6,6 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-            <field name="partner_id" position = "before">
-                <button string="Prueba" type="object" name="test" icon = "fa-bug"/>
-            </field>
-
             <xpath expr="//page[1]" position="after">
                  <page string="CFDI 4.0">
                     <group>
